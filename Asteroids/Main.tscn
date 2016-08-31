@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=1]
+[gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://Background.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Asteroid.tscn" type="PackedScene" id=3]
 
 [node name="World" type="Node2D"]
 
@@ -16,5 +17,12 @@ starVariation = 100
 bulletList = NodePath("../Bullets")
 
 [node name="Bullets" type="Node2D" parent="."]
+
+[node name="Asteroids" type="Node2D" parent="."]
+
+[node name="Asteroid" parent="Asteroids" instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 208.64, 463.426 )
+transform/rot = 16434.8
 
 

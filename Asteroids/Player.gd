@@ -25,20 +25,14 @@ const SHIP_COLOR = Color(1.0, 1.0, 1.0)
 const FLAME_COLOR = Color(1.0, 0.5, 0)
 
 #Instance Attributes
-var velocity
-var score
-var lives
-var accelerating
-var cooldown
+var velocity = Vector2(0, 0)
+var score = 0
+var lives = MAX_LIVES
+var accelerating = false
+var cooldown = 0
 
 func _ready():
 	set_pos(get_viewport_rect().size / 2)
-	velocity = Vector2(0, 0)
-	score = 0
-	lives = MAX_LIVES
-	accelerating = false
-	cooldown = 0
-	update()
 	set_process(true)
 
 func _process(delta):
@@ -88,11 +82,11 @@ func shoot(delta):
 		var b = BULLET.instance()
 		b.set_pos(get_pos() + TIP.rotated(get_rot()))
 		b.set_rot(get_rot())
-		get_node(bulletList).add_child(b)
+		get_node(bulletList).add_child(b, true)
 		cooldown = GUN_COOLDOWN
 
 func _hit(area):
-	if area.get_parent().get_name().contains("Asteroid"):
+	if area.get_parent().get_name().begins_with("Asteroid"):
 		print("DEAD")
 
 func _draw():

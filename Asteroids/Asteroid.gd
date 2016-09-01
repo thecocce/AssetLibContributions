@@ -5,8 +5,6 @@ extends Node2D
 const MIN_SPEED = 10
 const MAX_SPEED = 100
 
-const ASTEROID = preload("res://Asteroid.tscn")
-
 var POINTS = [Vector2(0, -40), Vector2(25, -25), Vector2(40, 0), Vector2(25, 25), Vector2(0, 40), Vector2(-25, 25), Vector2(-40, 0), Vector2(-25, -25)]
 
 var velocity = Vector2(0, 0)
@@ -39,14 +37,8 @@ func constrain():
 
 func split():
 	if get_scale().x > 0.5:
-		var a = ASTEROID.instance()
-		var b = ASTEROID.instance()
-		a.set_pos(get_pos() + Vector2(30, 30))
-		b.set_pos(get_pos() - Vector2(30, 30))
-		a.set_scale(Vector2(get_scale().x / 2, get_scale().y / 2))
-		b.set_scale(Vector2(get_scale().x / 2, get_scale().y / 2))
-		get_parent().add_child(a, true)
-		get_parent().add_child(b, true)
+		get_parent().spawnAsteroid(get_pos() + Vector2(30, 30), get_scale() / 2)
+		get_parent().spawnAsteroid(get_pos() - Vector2(30, 30), get_scale() / 2)
 	queue_free()
 
 func _draw():
@@ -56,6 +48,6 @@ func _draw():
 		draw_line(POINTS[i], POINTS[(i + 1) % POINTS.size()], Color(0.5, 0.3, 0.05))
 
 func _hit( area ):
-	print(area.get_parent().get_name())
 	if area.get_parent().get_name().begins_with("Bullet"):
+		get_parent().asteroidDestroyed()
 		split()

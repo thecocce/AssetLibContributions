@@ -37,7 +37,7 @@ func _ready():
 
 func _process(delta):
 	rotate(delta)
-	accelerate(delta)
+	accelerate(delta, false)
 	move(delta)
 	constrain()
 	shoot(delta)
@@ -49,8 +49,8 @@ func rotate(delta):
 	elif Input.is_action_pressed("RotateLeft"):
 		set_rot(get_rot() + ROTATION * delta)
 
-func accelerate(delta):
-	accelerating = Input.is_action_pressed("Accelerate")
+func accelerate(delta, ignoreInput):
+	accelerating = Input.is_action_pressed("Accelerate") or ignoreInput
 	
 	if not accelerating:
 		return
@@ -87,7 +87,12 @@ func shoot(delta):
 
 func _hit(area):
 	if area.get_parent().get_name().begins_with("Asteroid"):
-		print("DEAD")
+		lives -= 1
+		set_pos(get_viewport_rect().size / 2)
+		get_parent().get_node("DeathEffect").runEffect()
+		velocity = Vector2(0, 0)
+		if lives == 0:
+			get_tree().reload_current_scene()
 
 func _draw():
 	draw_line(TIP, RIGHT, SHIP_COLOR)
@@ -99,3 +104,6 @@ func _draw():
 		var flameTip = FLAME_TIP + Vector2(rand_range(-2, 2), 0)
 		draw_line(FLAME_LEFT, flameTip, FLAME_COLOR)
 		draw_line(flameTip, FLAME_RIGHT, FLAME_COLOR)
+
+func addScore(score):
+	self.score += score

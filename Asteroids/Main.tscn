@@ -52,8 +52,8 @@ maxAsteroids = 10
 
 [node name="Asteroid" parent="Asteroids" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 221.915, 389.754 )
-transform/rot = 309253.0
+transform/pos = Vector2( 229.089, 197.077 )
+transform/rot = 310267.0
 
 [node name="UI" type="Control" parent="."]
 

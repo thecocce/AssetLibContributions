@@ -9,7 +9,7 @@ points = Vector2Array( -20, 8, -20, -8, 20, 0 )
 
 [node name="Player" type="Node2D"]
 
-transform/pos = Vector2( 512, 300 )
+transform/pos = Vector2( 640, 360 )
 script/script = ExtResource( 1 )
 bulletList = null
 

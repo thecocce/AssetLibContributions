@@ -40,7 +40,7 @@ func _process(delta):
 			spawn()
 		#If the snake head is on top of food, grow and move the food
 		elif snake.pos == food:
-			snake.lengthen(Snake.new(null, null))
+			snake.lengthen()
 			food()
 		#Refresh draw calls to represent new board state
 		update()
@@ -66,7 +66,7 @@ func spawn():
 	snake = Snake.new(Vector2(BOARD_SIZE / 2, BOARD_SIZE / 2), Vector2(0, -1))
 	#Add segments until the sname is STARTING_SEGMENTS long
 	for i in range(1, STARTING_SEGMENTS):
-		snake.lengthen(Snake.new(null, null))
+		snake.lengthen()
 
 func food():
 	#Position the food at a random location on the board
@@ -105,28 +105,28 @@ class Snake:
 				return true
 			segment = segment.back
 		return false
-	
+
 	#Finds the head (first segment) of the snake this segment belongs to
 	func get_head():
 		var snake = self
 		while not snake.is_head():
 			snake = snake.front
 		return snake
-	
+
 	#Finds the tail (last segment) of the snake this segment belongs to
 	func get_tail():
 		var snake = self
 		while !snake.is_tail():
 			snake = snake.back
 		return snake
-	
+
 	#Appends the given segment to the end of the linked list
-	func lengthen(next):
-		next.front = get_tail()
-		next.pos = next.front.pos - next.front.dir
-		next.dir = next.front.dir
+	func lengthen():
+		var front = get_tail()
+		var next = get_script().new(front.pos - front.dir, front.dir)
+		next.front = front
 		next.front.back = next
-	
+
 	#Handles all movement for the snake, including input reading
 	func move():
 		#Read keystates to determine which direction to move this tick
@@ -137,11 +137,11 @@ class Snake:
 		var down = Input.is_action_pressed("ui_down") and dir != UP
 		var left = Input.is_action_pressed("ui_left") and dir != RIGHT
 		var right = Input.is_action_pressed("ui_right") and dir != LEFT
-		
+
 		#Start with the head, because this controls which direction
 		#the snake will turn if desired by the player
 		var segment = get_head()
-		
+
 		#Apply the movement choice to the head
 		if up:
 			segment.dir = UP
@@ -151,12 +151,12 @@ class Snake:
 			segment.dir = LEFT
 		elif right:
 			segment.dir = RIGHT
-		
+
 		#We want to start doing movements from the tail
 		#so that the new direction of the head moves down
 		#the list one segment per tick
 		segment = get_tail()
-		
+
 		#Until we reach the head
 		while !segment.is_head():
 			#Move the current segment by its current direction
